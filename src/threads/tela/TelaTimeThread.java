@@ -2,6 +2,10 @@ package threads.tela;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class TelaTimeThread extends JDialog {
 
@@ -15,6 +19,22 @@ public class TelaTimeThread extends JDialog {
 
     private JButton jButton = new JButton("Start");
     private JButton jButton2 = new JButton("Stop");
+
+    private Runnable thread1 = new Runnable() {
+        @Override
+        public void run() {
+            while (true){
+                mostraTempo.setText(new SimpleDateFormat("dd/MM/yyyy hh:mm.ss").format(Calendar.getInstance().getTime()));
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    };
+
+    private Thread thread1Time;
 
     public TelaTimeThread() { /* Executa o que tiver dentro no momento da abertura ou execução */
         setTitle("Minha tela de time com thread");
@@ -61,6 +81,23 @@ public class TelaTimeThread extends JDialog {
         jButton2.setPreferredSize(new Dimension(92,25));
         gridBagConstraints.gridx++;
         jPanel.add(jButton2, gridBagConstraints);
+
+        //---------------------------------------
+
+        jButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { /* Executa o clique no botão */
+                thread1Time = new Thread(thread1);
+                thread1Time.start();
+            }
+        });
+
+        jButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { /* Executa o clique no botão */
+                thread1Time.stop();
+            }
+        });
 
         add(jPanel, BorderLayout.WEST);
 
