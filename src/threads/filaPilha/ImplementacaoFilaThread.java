@@ -13,39 +13,46 @@ public class ImplementacaoFilaThread extends Thread {
 
     @Override
     public void run() {
-        Iterator iterator = pilhaFila.iterator();
 
-        synchronized (iterator) { /* Bloquear o acesso a esta lista por outros processos */
+        System.out.println("Fila rodando");
 
-            while (iterator.hasNext()){ /* Enquanto conter dados na lista irá processar */
+        while(true) {
 
-                ObjetoFilaThread processar = (ObjetoFilaThread) iterator.next(); /* Pega o objeto atual */
+            Iterator iterator = pilhaFila.iterator();
 
-                /* Processar 10 mil notas fiscais */
-                /* Gerar uma lista enorme de PDF */
-                /* Gerar um envio em massa de email */
+            synchronized (iterator) { /* Bloquear o acesso a esta lista por outros processos */
 
-                System.out.println("---------------------------------");
+                while (iterator.hasNext()){ /* Enquanto conter dados na lista irá processar */
 
-                System.out.println(processar.getNome());
-                System.out.println(processar.getEmail());
+                    ObjetoFilaThread processar = (ObjetoFilaThread) iterator.next(); /* Pega o objeto atual */
 
-                iterator.remove();
+                    /* Processar 10 mil notas fiscais */
+                    /* Gerar uma lista enorme de PDF */
+                    /* Gerar um envio em massa de email */
 
-                try {
-                    Thread.sleep(100); /* Dar um tempo para descarga de memoria */
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    System.out.println("---------------------------------");
+
+                    System.out.println(processar.getNome());
+                    System.out.println(processar.getEmail());
+
+                    iterator.remove();
+
+                    try {
+                        Thread.sleep(1000); /* Dar um tempo para descarga de memoria */
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+
                 }
 
             }
 
-        }
+            try {
+                Thread.sleep(1000); /* Processou lista e da um tempo para limpeza de memoria */
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
 
-        try {
-            Thread.sleep(1000); /* Processou lista e da um tempo para limpeza de memoria */
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
 
     }
