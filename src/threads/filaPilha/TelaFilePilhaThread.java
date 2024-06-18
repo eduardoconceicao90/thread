@@ -69,18 +69,27 @@ public class TelaFilePilhaThread extends JDialog {
         jButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) { /* Executa o clique no botão */
-                ObjetoFilaThread objetoFilaThread = new ObjetoFilaThread();
-                objetoFilaThread.setNome(nome.getText());
-                objetoFilaThread.setEmail(email.getText());
 
-                fila.add(objetoFilaThread);
+                if (fila == null){
+                    fila = new ImplementacaoFilaThread();
+                    fila.start();
+                }
+
+                for (int qtd = 0; qtd < 100; qtd++){
+                    ObjetoFilaThread objetoFilaThread = new ObjetoFilaThread();
+                    objetoFilaThread.setNome(nome.getText());
+                    objetoFilaThread.setEmail(email.getText());
+
+                    fila.add(objetoFilaThread);
+                }
             }
         });
 
         jButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) { /* Executa o clique no botão */
-
+                fila.stop();
+                fila = null;
             }
         });
 
